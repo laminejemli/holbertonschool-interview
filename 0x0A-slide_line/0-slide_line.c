@@ -1,130 +1,134 @@
-#include  "slide_line.h"
+#include "slide_line.h"
 
-/* *
-* slide_line - glisser et fusionner des entiers dans un tableau donné s'ils sont identiques
-* les nombres et sont soit contigus soit séparés par des zéros
-* @line : tableau d'entiers donné
-* @size : nombre d'éléments dans le tableau
-* @direction : direction, définie par la macro SLIDE_LEFT ou SLIDE_RIGHT passée pour
-* glissement nécessaire
-*
-* Retour : 1 en cas de succès ou 0 en cas d'échec
+
+/**
+ * slide_left - slide the line to the left.
+ * @line: line to apply the slide.
+ * @size: size of the array.
+ *
+ * Return: Void.
  */
-
-int  slide_line ( int *line, size_t size, int direction)
+void slide_left(int *line, size_t size)
 {
-	drapeau entier = 0 ;
+	int counter, i, j;
 
-	si (taille < 1 || (direction != SLIDE_LEFT && direction != SLIDE_RIGHT))
+	counter = 0;
+	for (i = 0; i < (int)size; i++)
 	{
-		retour (drapeau);
+		if (i == (int)size - 1)
+		{
+			line[counter] = line[i];
+			counter++;
+		}
+		if (line[i] == 0)
+			continue;
+		for (j = i + 1; j < (int)size; j++)
+		{
+			if (line[j] == 0 && j == (int)size - 1)
+			{
+				line[counter] = line[i];
+				counter++;
+			}
+			if (line[j] == 0)
+				continue;
+			if (line[i] == line[j])
+			{
+				line[counter] = line[i] * 2;
+				counter++;
+				i = j;
+				break;
+			}
+			if (line[i] != line[j])
+			{
+				line[counter] = line[i];
+				counter++;
+				break;
+			}
+		}
 	}
-	si (sens == SLIDE_LEFT)
+	for (i = counter; i < (int)size; i++)
 	{
-		flag = func_slide_left (ligne, taille);
+		line[i] = 0;
 	}
-	si (sens == SLIDE_RIGHT)
-	{
-		flag = func_slide_right (ligne, taille);
-	}
-	retour (drapeau);
 }
-/* *
-* func_slide_left - lorsque la direction est à gauche, glisse et fusionne
-* @line : tableau d'ints donné à lire comme une ligne
-* @size : nombre d'éléments dans le tableau
-* Retour : 1 en cas de succès, 0 en cas d'échec
-*/
-	int  func_slide_left ( int *ligne, taille_t taille)
-	{
-		int je, j, drapeau = 0 ;
-		je = 0 ;
-		pour (j = 1 ; j < ( int )taille ;)
-		{
-			si (ligne[j] == 0 )
-			{
-				j++;
-				continuer ;
-			}
-			si (ligne[i] == ligne[j])
-			{
-				ligne[i] += ligne[j] ;
-				ligne[j] = 0 ;
-				drapeau = 1 ;
-				je++ ;
-				j++;
-			}
-			sinon  si (ligne[i] != ligne[j])
-			{
-				si (ligne[i] == 0 )
-				{
-					ligne[i] += ligne[j] ;
-					ligne[j] = 0 ;
-					drapeau = 1 ;
-					j++;
-				}
-				autre
-				{
-					je++ ;
-					si (je != j)
-					{
-						ligne[i] += ligne[j] ;
-						ligne[j] = 0 ;
-						drapeau = 1 ;
-					}
-					j++;
-				}
-			}
-		}
-		retour (drapeau);
-	}
 
-/* *
-* func_slide_right - direction donnée, glisse et fusionne les entiers dans le tableau
-* @line : tableau d'ints donné dans une ligne
-* @size : nombre d'éléments dans le tableau
-* Retour : 1 en cas de succès, 0 en cas d'échec
-*/
-	int  func_slide_right ( int *ligne, taille_t taille)
+
+/**
+ * slide_right - slide the line to the right.
+ * @line: line to apply the slide.
+ * @size: size of the array.
+ *
+ * Return: Void.
+ */
+void slide_right(int *line, size_t size)
+{
+	int counter, i, j;
+
+	counter = size - 1;
+	for (i = size - 1; i >= 0; i--)
 	{
-		int je, j, drapeau = 0 ;
-		je = (( int )taille - 1 );
-		pour (j = (( int )taille - 2 ); j ​​>= 0 ;)
+		if (i == 0)
 		{
-			si (ligne[j] == 0 )
+			line[counter] = line[i];
+			counter--;
+		}
+		if (line[i] == 0)
+			continue;
+		for (j = i - 1; j >= 0; j--)
+		{
+			if (line[j] == 0 && j == 0)
 			{
-				j-- ;
-				continuer ;
+				line[counter] = line[i];
+				counter--;
 			}
-			si (ligne[i] == ligne[j])
+			if (line[j] == 0)
+				continue;
+			if (line[i] == line[j])
 			{
-				ligne[i] += ligne[j] ;
-				ligne[j] = 0 ;
-				drapeau = 1 ;
-				je--;
-				j-- ;
+				line[counter] = line[i] * 2;
+				counter--;
+				i = j;
+				break;
 			}
-			sinon  si (ligne[i] != ligne[j])
+			if (line[i] != line[j])
 			{
-				si (ligne[i] == 0 )
-				{
-					ligne[i] += ligne[j] ;
-					ligne[j] = 0 ;
-					drapeau = 1 ;
-					j-- ;
-				}
-				autre
-				{
-					je--;
-					si (je != j)
-					{
-						ligne[i] += ligne[j] ;
-						ligne[j] = 0 ;
-						drapeau = 1 ;
-					}
-					j-- ;
-				}
+				line[counter] = line[i];
+				counter--;
+				break;
 			}
 		}
-		retour (drapeau);
 	}
+	for (i = counter; i >= 0; i--)
+	{
+		line[i] = 0;
+	}
+}
+
+
+/**
+ * slide_line - slide the line.
+ * @line: line to apply the slide.
+ * @size: size of the array.
+ * @direction: direction to slide.
+ *
+ * Return: Void.
+ */
+int slide_line(int *line, size_t size, int direction)
+{
+	if (line == NULL || size == 0)
+		return (0);
+	if (direction == 1)
+	{
+		slide_left(line, size);
+		return (1);
+	}
+	else if (direction == 0)
+	{
+		slide_right(line, size);
+		return (1);
+	}
+	else
+	{
+		return (0);
+	}
+}
