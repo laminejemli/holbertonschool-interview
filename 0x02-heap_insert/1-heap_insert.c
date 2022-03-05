@@ -6,6 +6,7 @@
  * @value: Value store in the node to be inserted.
  * Return: Return a pointer to the inserted node, or NULL on failure
  */
+
 heap_t *heap_insert(heap_t **root, int value)
 {
 	heap_t *new = NULL;
@@ -42,6 +43,7 @@ heap_t *heap_insert(heap_t **root, int value)
  * @node: Pointer to the root node of the Heap.
  * Return: An struct with the node size.
  */
+
 space_t heap_size(heap_t *node)
 {
 	space_t tmp, left, right;
