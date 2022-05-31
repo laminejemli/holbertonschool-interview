@@ -1,63 +1,64 @@
 #!/usr/bin/python3
-"""program that solves the N queens problem"""
-
+"""N Queens"""
 import sys
 
 
-def queens(n):
-    """program that solves the N queens problem"""
-    trail = []
-    sets = set()
-    for column in range(n):
-        trail.append([0, column])
-        sets.add(column)
+def format_requirements(board):
+    """Prints according to requirement"""
+    ret = []
+    for i in range(len(board)):
+        colIdx = board[i].index(1)
+        ret.append([i, colIdx])
+    print(ret)
 
-    road = []
-    while trail:
-        [row, column] = trail.pop(0)
-        while road and (row < road[0][0]):
-            road.pop(0)
-        if road and (row == road[0][0]):
-            road[0] = [row, column]
-        else:
-            road.insert(0, [row, column])
 
-        nextsrows = row + 1
-        death = set()
-        for (i, j) in road:
-            death.add(j)
-            distance = nextsrows - i
-            if j - distance >= 0:
-                death.add(j - distance)
-            if j + distance < n:
-                death.add(j + distance)
+def is_valid_queen(board, curCol, row, n):
+    """Checks if element is a valid queen"""
+    for i in range(curCol):
+        if board[row][i] == 1:
+            return False
+    i = row
+    j = curCol
+    while i >= 0 and j >= 0:
+        if board[i][j] == 1:
+            return False
+        i -= 1
+        j -= 1
+    i = row
+    j = curCol
+    while i < n and j >= 0:
+        if board[i][j] == 1:
+            return False
+        i += 1
+        j -= 1
+    return True
 
-        safe = sets.difference(death)
-        if not safe:
-            if nextsrows == n:
-                temp = road.copy()
-                temp.reverse()
-                print(temp, flush=True)
-            road.pop(0)
-        else:
-            safe = list(safe)
-            safe.reverse()
-            for position in safe:
-                trail.insert(0, [nextsrows, position])
+
+def nQueens(board, curCol, n):
+    """Recursive function that places queens in all the
+    posible positions of the board"""
+    stat = False
+    if curCol == n:
+        format_requirements(board)
+        return True
+    for row in range(0, n):
+        if is_valid_queen(board, curCol, row, n):
+            board[row][curCol] = 1
+            stat = nQueens(board, curCol + 1, n) or stat
+            board[row][curCol] = 0
+    return stat
 
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         exit(1)
-
-    if int(sys.argv[1]) < 4:
-        print("N must be at least 4")
-        exit(1)
-
-    try:
-        n = int(sys.argv[1])
-    except:
+    if not sys.argv[1].isdigit():
         print("N must be a number")
         exit(1)
-    queens(n)
+    n = int(sys.argv[1])
+    if n < 4:
+        print("N must be at least 4")
+        exit(1)
+    board = [[0 for i in range(n)] for j in range(n)]
+    nQueens(board, 0, n)
