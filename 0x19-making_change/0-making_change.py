@@ -11,19 +11,19 @@ def makeChange(coins, total):
         return 0
 
     coins.sort(reverse=True)
-    stack = total
-    mv = 0
-    cnt = 0
+    stk = total
+    m = 0
+    ct = 0
 
-    while (mv < len(coins)):
-        if stack == 0:
-            return cnt
+    while (m < len(coins)):
+        if stk == 0:
+            return ct
 
-        if coins[mv] > stack:
-            mv += 1
+        if coins[m] > stk:
+            m += 1
 
         else:
-            stack -= coins[mv]
-            cnt += 1
+            stk -= coins[m]
+            ct += 1
 
     return -1
