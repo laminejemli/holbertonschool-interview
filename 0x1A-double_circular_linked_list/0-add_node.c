@@ -6,7 +6,7 @@
  */
 List *create_node(char *str)
 {
-	List *node ;
+	List *node = NULL ;
 
 	node = malloc(sizeof(List));
 	if (!node)
@@ -31,7 +31,7 @@ List *create_node(char *str)
  */
 List *add_node_end(List **list, char *str)
 {
-	List *node ;
+	List *node = NULL ;
 
 	node = create_node(str);
 	if (!node)
@@ -60,7 +60,7 @@ List *add_node_end(List **list, char *str)
  */
 List *add_node_begin(List **list, char *str)
 {
-	List *node ;
+	List *node = NULL ;
 
 	node = create_node(str);
 	if (!node)
